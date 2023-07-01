@@ -1,7 +1,9 @@
+name: Actions deploy Terraform
+run-name: PR Workflow MAIN
 on:
   pull_request:
       branches:
-        - master
+        - main
       types:
         - opened
         - edited
