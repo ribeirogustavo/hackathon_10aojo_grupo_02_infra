@@ -1,44 +1,53 @@
+name: Actions deploy Terraform
+run-name: PR Workflow MAIN
 on:
   pull_request:
       branches:
-        - master
+        - main
       types:
-        - opened
-        - edited
+        - closed
+
+env:
+  AWS_ACCESS_KEY_ID: ${{ vars.AWS_ACCESS_KEY_ID}}
+  AWS_SECRET_ACCESS_KEY: ${{ vars.AWS_SECRET_ACCESS_KEY}}
+  AWS_DEFAULT_REGION: ${{ vars.AWS_DEFAULT_REGION}}
 
 jobs:
-  tf_fmt:
-    name: Deploy Site
+  terraform:
+    if: "github.event.pull_request.merged == true"
+    name: Deploying Terraform
     runs-on: ubuntu-latest
-    steps:
+    
+    steps:   
 
-    - name: Checkout Repo
-      uses: actions/checkout@v1
+      - name: Checkout
+        uses: actions/checkout@v2
 
-    - name: Terraform Init
-      uses: hashicorp/terraform-github-actions/init@v0.4.0
-      env:
-        TOKEN: ${{ secrets.TOKEN }}
-        TF_ACTION_WORKING_DIR: 'terraform'
-        AWS_ACCESS_KEY_ID:  ${{ secrets.AWS_ACCESS_KEY_ID }}
-        AWS_SECRET_ACCESS_KEY:  ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      - name: Setup Terraform
+        uses: autero1/action-terraform@v1.1.0
+        with:
+          terraform_version: 1.2.8
 
-    - name: Terraform Validate
-      uses: hashicorp/terraform-github-actions/validate@v0.3.7
+      - name: Echo AWS_ACCESS_KEY_ID
+        run: echo "$AWS_ACCESS_KEY_ID"
+      
+      - name: Echo AWS_SECRET_ACCESS_KEY
+        run: echo "$AWS_SECRET_ACCESS_KEY"
 
-    - name: Terraform Apply
-      uses: hashicorp/terraform-github-actions/apply@v0.4.0
-      env:
-        TOKEN: ${{ secrets.TOKEN }}
-        TF_ACTION_WORKING_DIR: 'terraform'
-        AWS_ACCESS_KEY_ID:  ${{ secrets.AWS_ACCESS_KEY_ID }}
-        AWS_SECRET_ACCESS_KEY:  ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      - name: Echo AWS_DEFAULT_REGION
+        run: echo "$AWS_DEFAULT_REGION"
 
-    - name: Sync S3
-      uses: jakejarvis/s3-sync-action@master
-      env:
-        SOURCE_DIR: './src'
-        AWS_REGION: 'us-east-1'
-        AWS_S3_BUCKET: '[BUCKET_NAME_HERE]'
-        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      - name: Mostando arquivos repo
+        run: ls -lh
+
+      - name: Deploying ECR
+        run: cd ./ecr && terraform init && terraform plan && terraform apply -auto-approve
+
+      - name: Deploying ECS
+        run: cd ./ecs && terraform init && terraform plan && terraform apply -auto-approve
+      
+      - name: Deploying RDS
+        run: cd ./rds && terraform init && terraform plan && terraform apply -auto-approve
+
+      - name: Deploying S3
+        run: cd ./s3 && terraform init && terraform plan && terraform apply -auto-approve
