@@ -66,6 +66,9 @@ jobs:
       
       - name: Acessando pasta RDS
         run: cd ../rds/
+        env:  
+         DB_USERNAME: ${{ secrets.DB_USERNAME }}  
+         DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
 
       - name: Terraform Init  
         run: terraform init 
@@ -84,6 +87,7 @@ jobs:
 
       - name: Interact with Terraform
         run: terraform plan
+
 
       - name: Terraform Apply  
         run: terraform apply -auto-approve
