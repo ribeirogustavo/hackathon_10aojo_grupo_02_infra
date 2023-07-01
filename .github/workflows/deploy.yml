@@ -14,7 +14,6 @@ env:
 
 jobs:
   terraform:
-    if: "github.event.pull_request.merged == true"
     name: Deploying Terraform
     runs-on: ubuntu-latest
     
