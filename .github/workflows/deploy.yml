@@ -41,9 +41,9 @@ jobs:
         run: ls -lh
 
       - name: Acessando pasta ECR
-        run: cd ./ecr/
+        run: cd ./ecr
 
-      - name: Terraform Init  
+      - name: Terraform Init
         run: terraform init 
 
       - name: Interact with Terraform
@@ -53,7 +53,7 @@ jobs:
         run: terraform apply -auto-approve  
 
       - name: Acessando pasta ECS
-        run: cd ../ecs/
+        run: cd ../ecs
 
       - name: Terraform Init  
         run: terraform init 
@@ -65,10 +65,7 @@ jobs:
         run: terraform apply -auto-approve  
       
       - name: Acessando pasta RDS
-        run: cd ../rds/
-        env:  
-         DB_USERNAME: ${{ secrets.DB_USERNAME }}  
-         DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+        run: cd ../rds
 
       - name: Terraform Init  
         run: terraform init 
