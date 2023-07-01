@@ -37,8 +37,8 @@ resource "aws_db_instance" "db_instance" {
   instance_class         = "db.t2.micro"  
   allocated_storage      = 5  
   name                   = "hackathon"  
-  username               = "hack"  
-  password               = "2093x90290sxoijseijlks"  
+  username               = var.db_username  
+  password               = var.db_password  
   db_subnet_group_name   = aws_db_subnet_group.db_subnet_group.name  
   vpc_security_group_ids = [aws_security_group.db_security_group.id]  
 }  
