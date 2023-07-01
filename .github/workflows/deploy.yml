@@ -33,6 +33,9 @@ jobs:
       - name: Echo AWS_SECRET_ACCESS_KEY
         run: echo "$AWS_SECRET_ACCESS_KEY"
 
+      - name: Mostando arquivos repo
+        run: ls -lh
+
       - name: Acessando pasta ECR
         run: cd ./ecr/
 
