@@ -25,6 +25,12 @@ jobs:
         with:
           terraform_version: 1.2.8
 
+      - name: Echo AWS_ACCESS_KEY_ID
+        run: echo "$AWS_ACCESS_KEY_ID
+      
+      - name: Echo AWS_SECRET_ACCESS_KEY
+        run: echo "$AWS_SECRET_ACCESS_KEY 
+
       - name: Acessando pasta ECR
         run: cd ./ecr/
 
