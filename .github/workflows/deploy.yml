@@ -11,6 +11,7 @@ on:
 env:
   AWS_ACCESS_KEY_ID: ${{ vars.AWS_ACCESS_KEY_ID}}
   AWS_SECRET_ACCESS_KEY: ${{ vars.AWS_SECRET_ACCESS_KEY}}
+  AWS_DEFAULT_REGION: ${{ vars.AWS_DEFAULT_REGION}}
 
 jobs:
   terraform:
@@ -33,29 +34,56 @@ jobs:
       - name: Echo AWS_SECRET_ACCESS_KEY
         run: echo "$AWS_SECRET_ACCESS_KEY"
 
+      - name: Echo AWS_DEFAULT_REGION
+        run: echo "$AWS_DEFAULT_REGION"
+
       - name: Mostando arquivos repo
         run: ls -lh
 
       - name: Acessando pasta ECR
         run: cd ./ecr/
 
+      - name: Terraform Init  
+        run: terraform init 
+
       - name: Interact with Terraform
         run: terraform plan
+
+      - name: Terraform Apply  
+        run: terraform apply -auto-approve  
 
       - name: Acessando pasta ECS
         run: cd ../ecs/
 
+      - name: Terraform Init  
+        run: terraform init 
+
       - name: Interact with Terraform
         run: terraform plan
+
+      - name: Terraform Apply  
+        run: terraform apply -auto-approve  
       
       - name: Acessando pasta RDS
         run: cd ../rds/
 
+      - name: Terraform Init  
+        run: terraform init 
+
       - name: Interact with Terraform
         run: terraform plan
+
+      - name: Terraform Apply  
+        run: terraform apply -auto-approve  
 
       - name: Acessando pasta S3
         run: cd ../s3/
 
+      - name: Terraform Init
+        run: terraform init 
+
       - name: Interact with Terraform
         run: terraform plan
+
+      - name: Terraform Apply  
+        run: terraform apply -auto-approve
