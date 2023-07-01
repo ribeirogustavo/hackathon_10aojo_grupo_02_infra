@@ -44,12 +44,13 @@ jobs:
 
       - name: Deploying ECS
         run: cd ./ecs && terraform init && terraform plan && terraform apply -auto-approve
-      
-      - name: Deploying RDS
-        run: cd ./rds && terraform init && terraform plan && terraform apply -auto-approve
 
       - name: Deploying S3
         run: cd ./s3 && terraform init && terraform plan && terraform apply -auto-approve
-
+      
       - name: Deploying Gateway
         run: cd ./gateway && terraform init && terraform plan && terraform apply -auto-approve
+
+      - name: Deploying RDS
+        run: cd ./rds && terraform init && terraform plan && terraform apply -auto-approve
+
